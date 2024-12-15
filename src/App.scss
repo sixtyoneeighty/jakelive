@@ -169,3 +169,97 @@ body {
   border-radius: 32px;
   max-height: fit-content;
 }
+
+.mobile-streaming-interface {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+
+  .stream-header {
+    padding: 1rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    .voice-selector {
+      width: 120px;
+      
+      .react-select__control {
+        background: rgba(0, 0, 0, 0.5) !important;
+      }
+      
+      .react-select__single-value {
+        color: white;
+      }
+      
+      .react-select__menu {
+        background: var(--Neutral-15);
+        border: 1px solid var(--Neutral-30);
+      }
+    }
+  }
+
+  .stream-content {
+    flex: 1;
+    position: relative;
+    
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .stream-controls {
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    
+    button {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: #ff0000;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      
+      &.disabled {
+        background: #666;
+      }
+    }
+  }
+
+  .stream-status {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  
+  img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+  }
+}
