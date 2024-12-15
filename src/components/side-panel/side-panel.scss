@@ -119,14 +119,50 @@
     }
 
     .opener {
-      height: 30px;
-      transition: transform 0.2s ease-in;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      transition: all 0.2s ease-in;
+      
+      &:hover {
+        background: var(--Neutral-20);
+        border-radius: 4px;
+      }
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
     }
   }
 
   .opener {
-    height: 30px;
-    transition: transform 0.2s ease-in;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transition: all 0.2s ease-in;
+    
+    &:hover {
+      background: var(--Neutral-20);
+      border-radius: 4px;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   &:not(.open) {
@@ -159,6 +195,7 @@
     align-items: center;
     padding: 8px 16px;
     gap: 8px;
+    transition: all 0.2s ease-in;
 
     .status-indicator {
       background: var(--Neutral-15);
@@ -169,35 +206,37 @@
       display: flex;
       align-items: center;
       font-size: 14px;
+      transition: all 0.2s ease-in;
+      width: 100%;
 
       .status-text {
         white-space: nowrap;
+        transition: all 0.2s ease-in;
       }
     }
 
     .streaming-indicator {
       user-select: none;
       border-radius: 4px;
-      border: 1px solid var(--Neutral-20, #2a2f31);
-      background: var(--Neutral-10, #1c1f21);
-      display: flex;
-      width: 136px;
-      height: 30px;
-      padding-left: 4px;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-      text-align: center;
-      font-family: "Space Mono";
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: normal;
-      transition: width 0.2s ease-in;
+      white-space: nowrap;
+      transition: all 0.2s ease-in;
+    }
+  }
 
-      &.connected {
-        color: var(--Blue-500, #0d9c53);
+  &:not(.open) {
+    .indicators {
+      padding: 8px 4px;
+      flex-direction: column;
+      
+      .status-indicator {
+        padding: 6px;
+        justify-content: center;
+      }
+      
+      .streaming-indicator {
+        font-size: 12px;
+        padding: 4px;
+        text-align: center;
       }
     }
   }

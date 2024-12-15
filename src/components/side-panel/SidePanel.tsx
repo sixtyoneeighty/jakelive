@@ -80,7 +80,7 @@ export default function SidePanel() {
       </header>
       <section className="indicators">
         <div className="status-indicator">
-          <span className="status-text">AI Chat Live</span>
+          <span className="status-text">{open ? "AI Chat Live" : "AI"}</span>
         </div>
         <div className={cn("streaming-indicator", { connected })}>
           {connected
