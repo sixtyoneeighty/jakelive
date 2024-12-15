@@ -61,13 +61,17 @@ export const MobileStream: React.FC<MobileStreamProps> = ({ onStreamStart, onStr
 
         processor.onaudioprocess = (e) => {
           const inputData = e.inputBuffer.getChannelData(0);
+          // Convert audio data to base64 string
+          const audioArray = Array.from(inputData);
+          const base64Data = btoa(String.fromCharCode.apply(null, audioArray));
+          
           // Send audio data to the model
           if (isStreaming) {
             client.send([
               {
                 inlineData: {
                   mimeType: "audio/wav",
-                  data: Array.from(inputData),
+                  data: base64Data,
                 },
               },
             ]);
