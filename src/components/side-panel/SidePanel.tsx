@@ -78,7 +78,6 @@ export default function SidePanel() {
       <header className="top">
         <div className="header-content">
           <img src={logo} alt="60180" className="header-logo" />
-          <h2>Console</h2>
         </div>
         {open ? (
           <button className="opener" onClick={() => setOpen(false)}>
