@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLoggerStore } from '../../lib/store-logger';
 import { useLiveAPIContext } from '../../contexts/LiveAPIContext';
-import { Logger } from '../logger/Logger';
+import Logger from '../logger/Logger';
 import './mobile-chat.scss';
 
 export const MobileChat: React.FC = () => {
