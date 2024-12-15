@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from 'react-icons/fa';
 import { Logo } from '../logo/Logo';
 import { VoiceSelector } from '../voice-selector/VoiceSelector';
+import { MobileChat } from '../mobile-chat/MobileChat';
 import { useLiveAPIContext } from '../../contexts/LiveAPIContext';
 import cn from 'classnames';
 
@@ -104,34 +105,38 @@ export const MobileStream: React.FC<MobileStreamProps> = ({ onStreamStart, onStr
       </div>
       
       <div className="stream-content">
-        <video 
+        <video
           ref={videoRef}
           autoPlay
           playsInline
           muted
+          className={cn("video-preview", { active: isStreaming })}
         />
-        
-        {isStreaming && (
-          <div className="stream-status">
-            Stream is live
-          </div>
-        )}
+
+        <div className="controls">
+          <button
+            className={cn("control-button", { active: hasAudio })}
+            onClick={() => setHasAudio(!hasAudio)}
+          >
+            {hasAudio ? <FaMicrophone /> : <FaMicrophoneSlash />}
+          </button>
+          <button
+            className={cn("control-button", { active: hasVideo })}
+            onClick={() => setHasVideo(!hasVideo)}
+          >
+            {hasVideo ? <FaVideo /> : <FaVideoSlash />}
+          </button>
+          <button
+            className={cn("stream-button", { active: isStreaming })}
+            onClick={isStreaming ? stopStream : startStream}
+          >
+            {isStreaming ? "Stop" : "Start"}
+          </button>
+        </div>
       </div>
 
-      <div className="stream-controls">
-        <button 
-          onClick={toggleAudio}
-          className={cn({ disabled: !hasAudio })}
-        >
-          {hasAudio ? <FaMicrophone /> : <FaMicrophoneSlash />}
-        </button>
-        
-        <button 
-          onClick={toggleVideo}
-          className={cn({ disabled: !hasVideo })}
-        >
-          {hasVideo ? <FaVideo /> : <FaVideoSlash />}
-        </button>
+      <div className="chat-container">
+        <MobileChat />
       </div>
     </div>
   );

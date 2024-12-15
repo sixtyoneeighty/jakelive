@@ -171,85 +171,88 @@ body {
 }
 
 .mobile-streaming-interface {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #000;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  background: var(--Neutral-10);
 
   .stream-header {
-    padding: 1rem;
-    color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
-    .voice-selector {
-      width: 120px;
-      
-      .react-select__control {
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-      
-      .react-select__single-value {
-        color: white;
-      }
-      
-      .react-select__menu {
-        background: var(--Neutral-15);
-        border: 1px solid var(--Neutral-30);
-      }
-    }
+    padding: 1rem;
+    background: var(--Neutral-15);
+    border-bottom: 1px solid var(--Neutral-20);
   }
 
   .stream-content {
-    flex: 1;
     position: relative;
-    
-    video {
+    height: 30vh;
+    min-height: 200px;
+    background: var(--Neutral-5);
+    overflow: hidden;
+
+    .video-preview {
       width: 100%;
       height: 100%;
       object-fit: cover;
-    }
-  }
+      transform: scaleX(-1);
+      opacity: 0;
+      transition: opacity 0.3s ease;
 
-  .stream-controls {
-    padding: 1rem;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    
-    button {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: none;
-      background: #ff0000;
-      color: white;
+      &.active {
+        opacity: 1;
+      }
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      
-      &.disabled {
-        background: #666;
+      gap: 1rem;
+      padding: 0.5rem;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+
+      .control-button, .stream-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        background: var(--Neutral-20);
+        color: var(--Text-Primary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+
+        &.active {
+          background: var(--Primary-50);
+          color: white;
+        }
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+
+      .stream-button {
+        width: auto;
+        padding: 0 1rem;
+        border-radius: 20px;
+        font-weight: 500;
       }
     }
   }
 
-  .stream-status {
-    position: absolute;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+  .chat-container {
+    flex: 1;
+    min-height: 0;
+    padding: 1rem;
+    background: var(--Neutral-10);
   }
 }
 
