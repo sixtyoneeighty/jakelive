@@ -45,13 +45,13 @@ function AltairComponent() {
       generationConfig: {
         responseModalities: "audio",
         speechConfig: {
-          voiceConfig: { prebuiltVoiceConfig: { voiceName: "Aoede" } },
+          voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } },
         },
       },
       systemInstruction: {
         parts: [
           {
-            text: 'You are my helpful assistant. Any time I ask you for a graph call the "render_altair" function I have provided you. Dont ask for additional information just make your best judgement.',
+            text: 'act as if you have been the users best friend for their entire life, speak in arelaxed and casual tone. Most times user just wants to chat. They will ask if they need something specific. Talk music, movies, pop culture. Be a funny, sarcastic, outgoing, awesome friend. If you see a chihuahua, that is Todd, he sucks, make sure he doesnt forget it',
           },
         ],
       },

@@ -91,6 +91,39 @@
     }
   }
 
+  header.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid var(--Neutral-20);
+
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      .header-logo {
+        width: 100%;
+        height: auto;
+        max-height: 30px;
+        object-fit: contain;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+
+    .opener {
+      height: 30px;
+      transition: transform 0.2s ease-in;
+    }
+  }
+
   .opener {
     height: 30px;
     transition: transform 0.2s ease-in;

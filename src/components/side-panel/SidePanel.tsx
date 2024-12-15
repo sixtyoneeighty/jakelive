@@ -21,6 +21,7 @@ import Select from "react-select";
 import { useLiveAPIContext } from "../../contexts/LiveAPIContext";
 import { useLoggerStore } from "../../lib/store-logger";
 import Logger, { LoggerFilterType } from "../logger/Logger";
+import logo from "../../assets/images/60180.png";
 import "./side-panel.scss";
 
 const filterOptions = [
@@ -75,7 +76,10 @@ export default function SidePanel() {
   return (
     <div className={`side-panel ${open ? "open" : ""}`}>
       <header className="top">
-        <h2>Console</h2>
+        <div className="header-content">
+          <img src={logo} alt="60180" className="header-logo" />
+          <h2>Console</h2>
+        </div>
         {open ? (
           <button className="opener" onClick={() => setOpen(false)}>
             <RiSidebarFoldLine color="#b4b8bb" />
