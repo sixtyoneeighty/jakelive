@@ -7,76 +7,18 @@ import { useLiveAPIContext } from '../../contexts/LiveAPIContext';
 import cn from 'classnames';
 
 interface MobileStreamProps {
-  onStreamStart?: (stream: MediaStream) => void;
-  onStreamEnd?: () => void;
+  onStreamStart: (stream: MediaStream) => void;
+  onStreamEnd: () => void;
 }
 
 export const MobileStream: React.FC<MobileStreamProps> = ({ onStreamStart, onStreamEnd }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isStreaming, setIsStreaming] = useState(false);
-  const [hasAudio, setHasAudio] = useState(true);
-  const [hasVideo, setHasVideo] = useState(true);
+  const [hasAudio, setHasAudio] = useState(false);
+  const [hasVideo, setHasVideo] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [selectedVoice, setSelectedVoice] = useState("Kore");
-  const { setConfig } = useLiveAPIContext();
-
-  const startStream = async () => {
-    try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      });
-      
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
-      
-      setStream(mediaStream);
-      setIsStreaming(true);
-      onStreamStart?.(mediaStream);
-    } catch (error) {
-      console.error('Error accessing media devices:', error);
-    }
-  };
-
-  const stopStream = () => {
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
-      if (videoRef.current) {
-        videoRef.current.srcObject = null;
-      }
-      setStream(null);
-      setIsStreaming(false);
-      onStreamEnd?.();
-    }
-  };
-
-  const toggleAudio = () => {
-    if (stream) {
-      const audioTrack = stream.getAudioTracks()[0];
-      if (audioTrack) {
-        audioTrack.enabled = !audioTrack.enabled;
-        setHasAudio(audioTrack.enabled);
-      }
-    }
-  };
-
-  const toggleVideo = () => {
-    if (stream) {
-      const videoTrack = stream.getVideoTracks()[0];
-      if (videoTrack) {
-        videoTrack.enabled = !videoTrack.enabled;
-        setHasVideo(videoTrack.enabled);
-      }
-    }
-  };
-
-  useEffect(() => {
-    startStream();
-    return () => {
-      stopStream();
-    };
-  }, []);
+  const { setConfig, client } = useLiveAPIContext();
 
   useEffect(() => {
     setConfig({
@@ -97,6 +39,71 @@ export const MobileStream: React.FC<MobileStreamProps> = ({ onStreamStart, onStr
     });
   }, [setConfig, selectedVoice]);
 
+  const startStream = async () => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: hasVideo,
+        audio: hasAudio,
+      });
+
+      if (videoRef.current && hasVideo) {
+        videoRef.current.srcObject = mediaStream;
+      }
+
+      // Set up audio handling if enabled
+      if (hasAudio) {
+        const audioContext = new AudioContext();
+        const source = audioContext.createMediaStreamSource(mediaStream);
+        const processor = audioContext.createScriptProcessor(1024, 1, 1);
+
+        source.connect(processor);
+        processor.connect(audioContext.destination);
+
+        processor.onaudioprocess = (e) => {
+          const inputData = e.inputBuffer.getChannelData(0);
+          // Send audio data to the model
+          if (isStreaming) {
+            client.send([
+              {
+                inlineData: {
+                  mimeType: "audio/wav",
+                  data: Array.from(inputData),
+                },
+              },
+            ]);
+          }
+        };
+      }
+
+      setStream(mediaStream);
+      setIsStreaming(true);
+      onStreamStart(mediaStream);
+    } catch (error) {
+      console.error('Error accessing media devices:', error);
+    }
+  };
+
+  const stopStream = () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+      setStream(null);
+      setIsStreaming(false);
+      onStreamEnd();
+    }
+  };
+
+  // Clean up on unmount
+  useEffect(() => {
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [stream]);
+
   return (
     <div className="mobile-streaming-interface">
       <div className="stream-header">
@@ -104,31 +111,42 @@ export const MobileStream: React.FC<MobileStreamProps> = ({ onStreamStart, onStr
         <VoiceSelector value={selectedVoice} onChange={setSelectedVoice} />
       </div>
       
-      <div className="stream-content">
+      <div className={cn("stream-content", { active: isStreaming && hasVideo })}>
         <video
           ref={videoRef}
           autoPlay
           playsInline
           muted
-          className={cn("video-preview", { active: isStreaming })}
+          className={cn("video-preview", { active: isStreaming && hasVideo })}
         />
 
         <div className="controls">
           <button
             className={cn("control-button", { active: hasAudio })}
-            onClick={() => setHasAudio(!hasAudio)}
+            onClick={() => {
+              if (isStreaming) {
+                stopStream();
+              }
+              setHasAudio(!hasAudio);
+            }}
           >
             {hasAudio ? <FaMicrophone /> : <FaMicrophoneSlash />}
           </button>
           <button
             className={cn("control-button", { active: hasVideo })}
-            onClick={() => setHasVideo(!hasVideo)}
+            onClick={() => {
+              if (isStreaming) {
+                stopStream();
+              }
+              setHasVideo(!hasVideo);
+            }}
           >
             {hasVideo ? <FaVideo /> : <FaVideoSlash />}
           </button>
           <button
             className={cn("stream-button", { active: isStreaming })}
             onClick={isStreaming ? stopStream : startStream}
+            disabled={!hasAudio && !hasVideo}
           >
             {isStreaming ? "Stop" : "Start"}
           </button>
