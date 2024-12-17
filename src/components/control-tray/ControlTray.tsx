@@ -191,15 +191,13 @@ function ControlTray({
               onIcon="videocam_off"
               offIcon="videocam"
             />
-            {webcam.isStreaming && 'toggleCamera' in webcam && (
+            {webcam.isStreaming && webcam.toggleCamera && (
               <button 
                 className="action-button" 
                 onClick={async () => {
-                  if (webcam.toggleCamera) {
-                    const newStream = await webcam.toggleCamera();
-                    setActiveVideoStream(newStream);
-                    onVideoStreamChange(newStream);
-                  }
+                  const newStream = await webcam.toggleCamera();
+                  setActiveVideoStream(newStream);
+                  onVideoStreamChange(newStream);
                 }}
               >
                 <span className="material-symbols-outlined">flip_camera_android</span>

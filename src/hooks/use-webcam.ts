@@ -17,7 +17,7 @@
 import { useState, useEffect } from "react";
 import { UseMediaStreamResult } from "./use-media-stream-mux";
 
-export function useWebcam(): UseMediaStreamResult & { toggleCamera?: () => Promise<MediaStream> } {
+export function useWebcam(): UseMediaStreamResult {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
@@ -69,7 +69,7 @@ export function useWebcam(): UseMediaStreamResult & { toggleCamera?: () => Promi
     return start();
   };
 
-  const result: UseMediaStreamResult & { toggleCamera?: () => Promise<MediaStream> } = {
+  const result: UseMediaStreamResult = {
     type: "webcam",
     start,
     stop,
