@@ -195,6 +195,8 @@ function ControlTray({
               <button 
                 className="action-button" 
                 onClick={async () => {
+                  // Re-check toggleCamera exists since this is an async callback
+                  if (!webcam.toggleCamera) return;
                   const newStream = await webcam.toggleCamera();
                   setActiveVideoStream(newStream);
                   onVideoStreamChange(newStream);
